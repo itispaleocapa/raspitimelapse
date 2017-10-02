@@ -1,0 +1,84 @@
+﻿
+esecuzione script avvio
+$ /etc/rc.local
+
+
+interruzione script
+ ps -ef | grep timelapse
+ sudo kill ??
+
+
+cancellazione cartella (attenzione!!!)
+sudo rm -r camera/d???
+
+
+cambio proprietario in "pi"
+sudo chown pi -R *.*
+
+
+rinominare immagini da 0
+ls *.jpg| awk 'BEGIN{ a=0 }{ printf "mv %s img%04d.jpg\n", $0, a++ }' | bash
+
+
+creazione video da immagini
+ http://techedemic.com/2014/09/18/creating-a-timelapse-clip-with-avconv/
+forum con errore iniziale e parametri funzionanti
+ https://www.raspberrypi.org/forums/viewtopic.php?t=128209&p=865045
+documentazione avconv
+ https://libav.org/avconv.html
+
+
+avconv -r 24 -f image2 -i d000/img%04d.jpg -r 24 -vcodec libx264 -crf 20 -g 15 timelapse000.mp4
+
+
+riproduzione video
+omxplayer timelapse000.mp4
+
+
+versione raspbian
+cat /etc/os-release
+uname -a
+
+riferimenti
+---------------------
+
+https://www.raspberrypi.org/learning/timelapse-setup/
+
+
+installazioni
+----------------
+
+
+2017-07-13
+sudo apt-get install libav-tools
+sudo apt-get update
+
+
+
+
+---------------------------------------------------------------------------------------------
+Controllo script via web
+---------------------------------------------------------------------------------------------
+
+
+installare Apache2 + PHP
+https://www.raspberrypi.org/documentation/remote-access/web-server/apache.md 
+
+
+installare NGINX + PHP
+https://www.raspberrypi.org/documentation/remote-access/web-server/nginx.md
+
+
+https://raspberrypi.stackexchange.com/questions/38439/how-to-run-a-python-script-on-a-raspberry-pi-via-webserver
+
+
+php terminal emulator
+https://github.com/spyrosoft/php-terminal-emulator 
+
+
+php program execution function
+http://php.net/manual/en/ref.exec.php 
+
+
+backtricks
+http://php.net/manual/en/language.operators.execution.php
