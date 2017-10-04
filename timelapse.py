@@ -1,6 +1,6 @@
 from picamera import PiCamera
 import picamera
-from time import sleep
+import time
 import argparse
 import random
 import os
@@ -19,7 +19,7 @@ else:
     delay =1
 
 #durata in minuti della ripresa
-time = args.t 
+duration = args.t 
 
 #cartella salvataggio immagini
 path = '/home/pi/camera/'
@@ -35,23 +35,28 @@ else:
     path = path + folder + '/'
 
 #numero totale scatti
-shots = int(time*60/delay)
+shots = int(duration*60/delay)
 
 print('parameters:')
 print(delay)
-print(time)
+print(duration)
 print(path)
 print(shots)
 
-camera = PiCamera()
-camera.resolution = '720p'
-camera.rotation = 180
 
 try:
     for i in range(shots):
-        camera.capture(path + 'imag{0:04d}.jpg'.format(i))
-        sleep(delay)
+        ts1 = time.time()
+        try:
+            camera = PiCamera()
+            camera.resolution = '720p'
+            camera.rotation = 180
+            camera.capture(path + 'imag{0:04d}.jpg'.format(i))
+            camera.close()
+        except:
+            print "Impossibile avviare la camera"
+        ts2 = time.time()
+        if delay-ts2+ts1>0:
+            time.sleep(delay-ts2+ts1)
 finally:
-    camera.stop()
-
-print("done.")
+    print("done.")
